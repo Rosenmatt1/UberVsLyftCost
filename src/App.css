@@ -5,3 +5,13 @@ body {
 .comparison {
   background-color: green;
 }
+
+.uber {
+  height: 40vh;
+  background-color: yellow;
+}
+
+.lyft {
+  height: 40vh;
+  background-color: orange;
+}
