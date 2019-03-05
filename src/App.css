@@ -2,16 +2,22 @@ body {
   background-color: white;
 }
 
+img {
+  width: 25%;
+  height: 25%;
+  
+}
+
 .comparison {
-  background-color: green;
+  background-color: white;
 }
 
 .uber {
   height: 40vh;
-  background-color: yellow;
+  background-color: white;
 }
 
 .lyft {
   height: 40vh;
-  background-color: orange;
+  background-color: white;
 }

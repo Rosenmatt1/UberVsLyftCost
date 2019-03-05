@@ -14,10 +14,7 @@ const Comparison = (props) => {
           <button type="button" className="btn btn-dark">Dark</button>
         </div>
 
-
-
         <p className="mt-5">VS</p>
-
 
         <div className="col-4 uber text-center mt-3">
           <h2>Uber</h2>
