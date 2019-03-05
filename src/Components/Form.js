@@ -11,16 +11,18 @@ const Form = (props) => {
           <form>
 
             <div className="form-group row">
-              <label for="pickUpLocation">From</label>
+              <label htmlFor="pickUpLocation">From</label>
               <div className="col-10"><input type="address" className="form-control" placeholder="Enter Pick Up Location"/> </div>
             </div>
 
             <div className="form-group row">
-              <label for="destination">To</label>
+              <label htmlFor="destination">To</label>
               <div className="col-10"><input type="address" className="form-control" placeholder="Password"/></div>
             </div>
 
-            <button type="submit" className="btn btn-dark">Find Best Deal</button>
+            <button onClick={props.searchPrices}
+            type="submit" 
+            className="btn btn-dark">Find Best Deal</button>
 
           </form>
           <div className="col-3"></div>
