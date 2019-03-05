@@ -3,7 +3,7 @@ import '../App.css'
 
 const Form = (props) => {
   return (
-    <div className="container text-center">
+    <div className="container text-center mt-3">
       <div className="row">
 
         <div className="col-4"></div>
