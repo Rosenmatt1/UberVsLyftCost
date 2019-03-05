@@ -11,7 +11,7 @@ const Comparison = (props) => {
           <h2>Lyft</h2>
           <p>Est Cost:</p>
           <p>ETA:</p>
-          <button type="button" className="btn btn-dark">Dark</button>
+          <button type="button" className="btn btn-dark">Book</button>
         </div>
 
         <p className="mt-5">VS</p>
@@ -20,7 +20,7 @@ const Comparison = (props) => {
           <h2>Uber</h2>
           <p>Est Cost:</p>
           <p>ETA:</p>
-          <button type="button" className="btn btn-dark">Dark</button>
+          <button type="button" className="btn btn-dark">Book</button>
         </div>
 
         <div className="col-2"></div>

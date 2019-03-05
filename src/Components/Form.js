@@ -20,7 +20,7 @@ const Form = (props) => {
               <div className="col-10"><input type="address" className="form-control" placeholder="Password"/></div>
             </div>
 
-            <button type="submit" className="btn btn-primary">Find Best Deal</button>
+            <button type="submit" className="btn btn-dark">Find Best Deal</button>
 
           </form>
           <div className="col-3"></div>
