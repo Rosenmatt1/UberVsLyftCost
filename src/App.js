@@ -198,13 +198,15 @@ class App extends Component {
 
   addressClick = (description) => {
     this.setState({ 
-      puAddress: description 
+      puAddress: description,
+      autocompletePu: ''
     })
   }
 
   clickDoAddress = (description) => {
     this.setState({
-      doAddress: description
+      doAddress: description,
+      autocompleteDo: '' 
     })
   }
 

@@ -15,7 +15,7 @@ const Form = (props) => {
               ? props.autocompletePu.predictions.map((guess, idx) => 
                 <div className="card" key={idx}>
                   <ul className="list-group list-group-flush">
-                    <li className="list-group-item" onClick={() => props.addressClick(guess.description)}>{guess.description}</li>
+                    <li className="list-group-item"  onClick={() => props.addressClick(guess.description)}>{guess.description}</li>
                   </ul>
                 </div>)
               : <div></div>}
