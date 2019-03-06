@@ -8,7 +8,7 @@ const Logo = (props) => {
       <div className="row justify-content-center">
         <img className="mx-auto" alt="Uber vs. Lyft" src={logo} />
         <div className="col-10">
-          <h1 className="highlight">Uber Vs. Lyft Price Comparison</h1>
+          <h1><span className="highlight text-light">Uber Vs. Lyft Price Comparison</span></h1>
         </div>
       </div>
     </div>
