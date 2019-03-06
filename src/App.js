@@ -13,11 +13,13 @@ class App extends Component {
     super()
     this.state = {
       puAddress: '',
-      autocomplete: '',
+      doAddress: '',
+      autocompletePu: '',
+      autocompleteDo: '',
       lyftCost: '',
       lyftETA: '',
       dropoffLatLong: '',
-      pickupLatLong: '',
+      pickupLatLong: ''
     }
   }
 
@@ -166,7 +168,25 @@ class App extends Component {
       .then(response => response.json())
       .then(data => {
         this.setState({
-          autocomplete: data
+          autocompletePu: data
+        })
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }
+
+  dropOffAddress = async (e) => {
+    // console.log(e.target[1].value)
+    this.setState({ doAddress: e.target.value })
+    await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${e.target.value}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg&sessiontoken=${localStorage.lyftjwt}`, {
+      method: "GET",
+      "Content-Type": "application/json",
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          autocompleteDo: data
         })
       })
       .catch(error => {
@@ -175,7 +195,15 @@ class App extends Component {
   }
 
   addressClick = (description) => {
-    this.setState({ puAddress: description })
+    this.setState({ 
+      puAddress: description 
+    })
+  }
+
+  addressClickDo = (description) => {
+    this.setState({
+      doAddress: description
+    })
   }
 
   render() {
@@ -186,8 +214,11 @@ class App extends Component {
           puAddress={this.state.puAddress}
           searchPrices={this.searchPrices}
           pickUpAddress={this.pickUpAddress}
-          autocomplete={this.state.autocomplete}
+          dropOffAddress={this.dropOffAddress}
+          autocompletePu={this.state.autocompletePu}
+          autocompleteDo={this.state.autocompleteDo}
           addressClick={this.addressClick}
+          addressClickDo={this.addressClickDo}
         />
         <Comparison 
           uberPrice={this.state.uberPrice}
