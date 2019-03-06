@@ -222,14 +222,15 @@ class App extends Component {
           addressClick={this.addressClick}
           clickDoAddress={this.clickDoAddress}
         />
-        <Comparison 
-          lyftCost={this.state.lyftCost}
-          lyftETA={this.state.lyftETA}
-          uberPrice={this.state.uberPrice}
-          uberTime={this.state.uberTime}
-        />
-      </div>
 
+        {this.state.uberPrice && this.state.uberTime && this.state.lyftCost && this.state.lyftETA
+        ? <Comparison 
+            lyftCost={this.state.lyftCost}
+            lyftETA={this.state.lyftETA}
+            uberPrice={this.state.uberPrice}
+            uberTime={this.state.uberTime}/> 
+        : <div></div> }
+      </div>
     );
   }
 }
