@@ -21,3 +21,7 @@ img {
   height: 40vh;
   background-color: white;
 }
+
+.list-group-item:hover {
+  background-color: blue;
+}
