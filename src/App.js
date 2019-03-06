@@ -13,6 +13,53 @@ class App extends Component {
     }
   }
 
+  fetchUberPrice = async () => {
+    localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
+    await fetch(proxyurl + priceUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token " + localStorage.uberjwt
+      },
+    })
+      .then(response => response.json())
+      .then(prices => {
+        let avgPrice = (((prices.prices[0].low_estimate) + (prices.prices[0].high_estimate)) / 2)
+        this.setState({
+          uberPrice: avgPrice
+        })
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }
+
+  fetchUberTime = async () => {
+    localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
+    await fetch(proxyurl + timeUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token " + localStorage.uberjwt
+      },
+    })
+      .then(response => response.json())
+      .then(times => {
+        let timeMin = times.times[0].estimate / 60
+        this.setState({
+          uberTime: timeMin
+        })
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }
+
+  componentDidMount() {
+    this.fetchUberPrice()
+    this.fetchUberTime()
+  }
+
   fetchHiddenLyftData = async () => {
     await fetch(`${lyftURL}oauth/token`, {
       method: "POST",
