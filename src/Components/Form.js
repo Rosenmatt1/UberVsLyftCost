@@ -2,8 +2,6 @@ import React from 'react'
 import '../App.css'
 
 const Form = (props) => {
-  props.puAddress ? console.log('pu yes') : console.log('pu no')
-  props.doAddress ? console.log('do yes') : console.log('do no')
   return (
     <div className="container text-center mt-1">
       <div className="row justify-content-center">

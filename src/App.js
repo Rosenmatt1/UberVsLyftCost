@@ -88,7 +88,6 @@ class App extends Component {
   }
 
   getLyftCost = async (startLat, startLong, endLat, endLong) => {
-    console.log("data? ", startLat, startLong, endLat, endLong)
     await fetch(`https://cors-anywhere.herokuapp.com/${lyftURL}v1/cost?start_lat=${startLat}&start_lng=${startLong}&end_lat=${endLat}&end_lng=${endLong}`, {
       method: "GET",
       headers: {
