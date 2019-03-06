@@ -3,7 +3,6 @@ import './App.css';
 import Form from './Components/Form.js'
 import Comparison from './Components/Comparison.js'
 import Logo from './Components/Logo.js'
-import { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 const lyftURL = 'https://api.lyft.com/'
 const proxyurl = "https://cors-anywhere.herokuapp.com/";
 const priceUrl = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075'
@@ -87,8 +86,9 @@ class App extends Component {
       })
   }
 
-  getLyftCost = async () => {
-    await fetch(`https://cors-anywhere.herokuapp.com/${lyftURL}v1/cost?start_lat=37.7763&start_lng=-122.3918&end_lat=37.7972&end_lng=-122.4533`, {
+  getLyftCost = async (startLat, startLong, endLat, endLong) => {
+    console.log("data? ", startLat, startLong, endLat, endLong)
+    await fetch(`https://cors-anywhere.herokuapp.com/${lyftURL}v1/cost?start_lat=${startLat}&start_lng=${startLong}&end_lat=${endLat}&end_lng=${endLong}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -106,8 +106,8 @@ class App extends Component {
       })
   }
 
-  getLyftETA = async () => {
-    await fetch(`https://cors-anywhere.herokuapp.com/${lyftURL}v1/eta?lat=37.7763&lng=-122.3918`, {
+  getLyftETA = async (startLat, startLong) => {
+    await fetch(`https://cors-anywhere.herokuapp.com/${lyftURL}v1/eta?lat=${startLat}&lng=${startLong}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -134,30 +134,33 @@ class App extends Component {
 
   searchPrices = async (e) => {
     e.preventDefault()
-    // await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${e.target[0].value}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
-    //   method: "GET",
-    //   "Content-Type": "application/json",})
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     this.setState({pickupLatLong: data})
-    //   })
-    //   .catch(error => {
-    //     console.error(error)
-    //   })
-    geocodeByAddress(e.target[0].value)
-    .then(results => getLatLng(results[0]))
-    .then(latLng => this.setState({pickupLatLong: latLng}))
-    .catch(error => console.error('Error', error));
-    geocodeByAddress(e.target[1].value)
-    .then(results => getLatLng(results[0]))
-    .then(latLng => this.setState({dropoffLatLong: latLng}))
-    .catch(error => console.error('Error', error));
-    this.getLyftCost()
-    this.getLyftETA()
+    const fromAddress = e.target[0].value
+    const toAddress = e.target[1].value
+      await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${fromAddress}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
+      method: "GET",
+      "Content-Type": "application/json",})
+      .then(response => response.json())
+      .then(data => {
+        this.setState({pickupLatLong: data.results[0].geometry.location})
+      })
+      .catch(error => {
+        console.error(error)
+      })
+      await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${toAddress}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
+      method: "GET",
+      "Content-Type": "application/json",})
+      .then(response => response.json())
+      .then(data => {
+        this.setState({dropoffLatLong: data.results[0].geometry.location})
+      })
+      .catch(error => {
+        console.error(error)
+      })
+    this.getLyftCost(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng, this.state.dropoffLatLong.lat, this.state.dropoffLatLong.lng)
+    this.getLyftETA(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng)
   }
 
   pickUpAddress = async (e) => {
-    console.log(e.target.value)
     this.setState({puAddress: e.target.value})
     await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${e.target.value}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg&sessiontoken=${localStorage.lyftjwt}`, {
       method: "GET",
@@ -204,7 +207,6 @@ class App extends Component {
   }
 
   render() {
-    console.log()
     return (
       <div>
         <Logo />

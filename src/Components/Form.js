@@ -2,9 +2,6 @@ import React from 'react'
 import '../App.css'
 
 const Form = (props) => {
-  console.log(props, 'props')
-  props.puAddress ? console.log("pick up yes") : console.log("pick up no")
-  props.doAddress ? console.log("drop off yes") : console.log("drop off no")
   return (
     <div className="container text-center mt-1">
       <div className="row justify-content-center">
