@@ -128,8 +128,6 @@ class App extends Component {
 
   async componentDidMount() {
     await this.fetchHiddenLyftData()
-      this.fetchUberPrice()
-      this.fetchUberTime()
       .catch(err => console.error(err))
   }
 
