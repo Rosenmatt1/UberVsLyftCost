@@ -14,8 +14,8 @@ const Comparison = (props) => {
         <p className="mt-5">VS</p>
         <div className="col-4 uber text-center mt-3">
           <h2>Uber</h2>
-          <p>Est Cost:</p>
-          <p>ETA:</p>
+          <p>Est Cost: ${props.uberPrice}</p>
+          <p>ETA: {props.uberTime}min </p>
           <button type="button" className="btn btn-dark">Book</button>
         </div>
       </div>

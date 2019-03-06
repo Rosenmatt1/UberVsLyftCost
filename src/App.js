@@ -5,11 +5,18 @@ import Comparison from './Components/Comparison.js'
 import Logo from './Components/Logo.js'
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 const lyftURL = 'https://api.lyft.com/'
+const proxyurl = "https://cors-anywhere.herokuapp.com/";
+const priceUrl = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075'
+const timeUrl = 'https://api.uber.com/v1.2/estimates/time?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075'
 
 class App extends Component {
   constructor() {
     super()
     this.state = {
+      uberPrice: null,
+      uberTime: null,
+      lyftCost: null,
+      lyftETA: null,
     }
   }
 
@@ -53,11 +60,6 @@ class App extends Component {
       .catch(error => {
         console.error(error)
       })
-  }
-
-  componentDidMount() {
-    this.fetchUberPrice()
-    this.fetchUberTime()
   }
 
   fetchHiddenLyftData = async () => {
@@ -121,6 +123,8 @@ class App extends Component {
 
   async componentDidMount() {
     await this.fetchHiddenLyftData()
+      this.fetchUberPrice()
+      this.fetchUberTime()
       .catch(err => console.error(err))
   }
 
@@ -180,7 +184,10 @@ class App extends Component {
           autocomplete={this.state.autocomplete}
           addressClick={this.addressClick}
         />
-        <Comparison />
+        <Comparison 
+          uberPrice={this.state.uberPrice}
+          uberTime={this.state.uberTime}
+        />
       </div>
 
     );
