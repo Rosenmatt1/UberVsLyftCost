@@ -2,11 +2,12 @@ import React from 'react'
 import '../App.css'
 
 const Form = (props) => {
+  props.puAddress ? console.log('pu yes') : console.log('pu no')
+  props.doAddress ? console.log('do yes') : console.log('do no')
   return (
     <div className="container text-center mt-1">
       <div className="row justify-content-center">
           <form className="col-10" onSubmit={props.searchPrices}>
-
             <div className="input-group mb-3">
               <input id="autocomplete" onChange={props.pickUpAddress} type="address" className="form-control" placeholder="Enter Pick Up Location" value={props.puAddress}/>
             </div>
@@ -14,12 +15,10 @@ const Form = (props) => {
               ? props.autocompletePu.predictions.map((guess, idx) => 
                 <div className="card" key={idx}>
                   <ul className="list-group list-group-flush">
-                    <li className="list-group-item" onClick={() => props.addressClick(guess.description)}>{guess.description}</li>
+                    <li className="list-group-item"  onClick={() => props.addressClick(guess.description)}>{guess.description}</li>
                   </ul>
                 </div>)
               : <div></div>}
-
-
             <div className="input-group mt-3 mb-3">
             <input id="autocomplete" onChange={props.dropOffAddress} type="address" className="form-control" placeholder="Enter Dropoff Location" value={props.doAddress}/>
             </div>
@@ -27,12 +26,10 @@ const Form = (props) => {
             ? props.autocompleteDo.predictions.map((guess, idx) =>
               <div className="card" key={idx}>
                 <ul className="list-group list-group-flush">
-                  <li className="list-group-item" onClick={() => props.addressClickDo(guess.description)}>{guess.description}</li>
+                  <li className="list-group-item" onClick={() => props.clickDoAddress(guess.description)}>{guess.description}</li>
                 </ul>
               </div>)
             : <div></div>}
-
-
             <button 
             type="submit" 
             className="btn btn-dark">Find the Best Deal</button>

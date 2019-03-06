@@ -181,8 +181,7 @@ class App extends Component {
   }
 
   dropOffAddress = async (e) => {
-    // console.log(e.target[1].value)
-    this.setState({ doAddress: e.target.value })
+    this.setState({doAddress: e.target.value})
     await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${e.target.value}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg&sessiontoken=${localStorage.lyftjwt}`, {
       method: "GET",
       "Content-Type": "application/json",
@@ -200,13 +199,15 @@ class App extends Component {
 
   addressClick = (description) => {
     this.setState({ 
-      puAddress: description 
+      puAddress: description,
+      autocompletePu: ''
     })
   }
 
-  addressClickDo = (description) => {
+  clickDoAddress = (description) => {
     this.setState({
-      doAddress: description
+      doAddress: description,
+      autocompleteDo: '' 
     })
   }
 
@@ -216,13 +217,14 @@ class App extends Component {
         <Logo />
         <Form 
           puAddress={this.state.puAddress}
+          doAddress={this.state.doAddress}
           searchPrices={this.searchPrices}
           pickUpAddress={this.pickUpAddress}
           dropOffAddress={this.dropOffAddress}
           autocompletePu={this.state.autocompletePu}
           autocompleteDo={this.state.autocompleteDo}
           addressClick={this.addressClick}
-          addressClickDo={this.addressClickDo}
+          clickDoAddress={this.clickDoAddress}
         />
         <Comparison 
           lyftCost={this.state.lyftCost}
