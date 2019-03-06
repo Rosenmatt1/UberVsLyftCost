@@ -4,16 +4,14 @@ import Form from './Components/Form.js'
 import Comparison from './Components/Comparison.js'
 import Logo from './Components/Logo.js'
 const lyftURL = 'https://api.lyft.com/'
-const proxyurl = "https://cors-anywhere.herokuapp.com/";
-const priceUrl = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075'
-const timeUrl = 'https://api.uber.com/v1.2/estimates/time?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075'
+const uberUrl = 'https://api.uber.com/'
 
 class App extends Component {
   constructor() {
     super()
     this.state = {
-      uberPrice: null,
-      uberTime: null,
+      uberPrice: '',
+      uberTime: '',
       puAddress: '',
       doAddress: '',
       autocompletePu: '',
@@ -25,9 +23,9 @@ class App extends Component {
     }
   }
 
-  fetchUberPrice = async () => {
+  fetchUberPrice = async (startLat, startLong, endLat, endLong) => {
     localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
-    await fetch(proxyurl + priceUrl, {
+  await fetch(`https://cors-anywhere.herokuapp.com/${uberUrl}v1.2/estimates/price?start_latitude=${startLat}&start_longitude=${startLong}&end_latitude=${endLat}&end_longitude=${endLong}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -46,9 +44,10 @@ class App extends Component {
       })
   }
 
-  fetchUberTime = async () => {
+  fetchUberTime = async (startLat, startLong, endLat, endLong) => {
     localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
-    await fetch(proxyurl + timeUrl, {
+    await fetch(`https://cors-anywhere.herokuapp.com/${uberUrl}v1.2/estimates/time?start_latitude=${startLat}&start_longitude=${startLong}&end_latitude=${endLat}&end_longitude=${endLong}`
+, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -159,6 +158,8 @@ class App extends Component {
       .catch(error => {
         console.error(error)
       })
+    this.fetchUberPrice(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng, this.state.dropoffLatLong.lat, this.state.dropoffLatLong.lng)
+    this.fetchUberTime(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng)
     this.getLyftCost(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng, this.state.dropoffLatLong.lat, this.state.dropoffLatLong.lng)
     this.getLyftETA(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng)
   }
