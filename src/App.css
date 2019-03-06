@@ -1,4 +1,12 @@
 body {
+  background-image: url("lyftuber.png");
+  height: 100%;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: 400px;
+}
+
+.highlight {
   background-color: white;
 }
 
