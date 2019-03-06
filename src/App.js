@@ -229,15 +229,9 @@ class App extends Component {
             lyftCost={this.state.lyftCost}
             lyftETA={this.state.lyftETA}
             uberPrice={this.state.uberPrice}
-            uberTime={this.state.uberTime}/> 
+            uberTime={this.state.uberTime} /> 
         : <div></div> }
 
-
-        <Comparison 
-          lyftCost={this.state.lyftCost}
-          lyftETA={this.state.lyftETA}
-          uberPrice={this.state.uberPrice}
-          uberTime={this.state.uberTime} />
 
       </div>
 

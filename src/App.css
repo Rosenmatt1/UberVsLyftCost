@@ -16,7 +16,7 @@ img {
   
 }
 
-.comparison {
+/* .comparison {
   background-color: white;
 }
 
@@ -28,7 +28,7 @@ img {
 .lyft {
   height: 40vh;
   background-color: white;
-}
+} */
 
 .list-group-item:hover {
   background-color: #373296;
