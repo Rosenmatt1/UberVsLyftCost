@@ -23,5 +23,49 @@ img {
 }
 
 .list-group-item:hover {
-  background-color: blue;
+  background-color: #373296;
+  color:white;
+}
+
+.btn {
+  background-color: #373296;
+  color: white 
+}
+
+.lyftDeal {
+  background-color:limegreen;
+  color: white;
+}
+
+.uberDeal {
+  background-color: limegreen;
+  color: white;
+}
+.lyftTime {
+  background-color: limegreen;
+  color: white;
+}
+.uberTime {
+  background-color: limegreen;
+  color: white;
+}
+
+.badTimeUber{
+  background-color: red;
+  color: white;
+}
+.badTimeLyft{
+  background-color: red;
+  color: white;
+
+}
+.badDealUber{
+  background-color: red;
+  color: white;
+
+}
+.badDealLyft{
+  background-color: red;
+  color: white;
+
 }
