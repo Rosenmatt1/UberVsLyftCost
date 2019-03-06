@@ -77,8 +77,18 @@ class App extends Component {
       .catch(err => console.error(err))
   }
 
-  searchPrices = (e) => {
+  searchPrices = async (e) => {
     e.preventDefault()
+    // await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${e.target[0].value}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
+    //   method: "GET",
+    //   "Content-Type": "application/json",})
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     this.setState({pickupLatLong: data})
+    //   })
+    //   .catch(error => {
+    //     console.error(error)
+    //   })
     geocodeByAddress(e.target[0].value)
     .then(results => getLatLng(results[0]))
     .then(latLng => this.setState({pickupLatLong: latLng}))
