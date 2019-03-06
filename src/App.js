@@ -12,6 +12,8 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
+      uberPrice: null,
+      uberTime: null,
       puAddress: '',
       doAddress: '',
       autocompletePu: '',
@@ -34,7 +36,7 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(prices => {
-        let avgPrice = (((prices.prices[0].low_estimate) + (prices.prices[0].high_estimate)) / 2)
+        let avgPrice = (((prices.prices[0].low_estimate) + (prices.prices[0].high_estimate)) / 2).toFixed(2)
         this.setState({
           uberPrice: avgPrice
         })
@@ -97,8 +99,9 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(data => {
+        let avgCost = (((data.cost_estimates[0].estimated_cost_cents_max + data.cost_estimates[0].estimated_cost_cents_min)/2)/100).toFixed(2)
         this.setState({
-          lyftCost: data
+          lyftCost: avgCost
         })
       })
       .catch(error => {
@@ -117,7 +120,7 @@ class App extends Component {
       .then(response => response.json())
       .then(data => {
         this.setState({
-          lyftETA: data
+          lyftETA: (data.eta_estimates[0].eta_seconds/60).toFixed(0)
         })
       })
       .catch(error => {
@@ -221,6 +224,8 @@ class App extends Component {
           addressClickDo={this.addressClickDo}
         />
         <Comparison 
+          lyftCost={this.state.lyftCost}
+          lyftETA={this.state.lyftETA}
           uberPrice={this.state.uberPrice}
           uberTime={this.state.uberTime}
         />
