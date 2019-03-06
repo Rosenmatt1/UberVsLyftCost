@@ -234,6 +234,7 @@ class App extends Component {
           clickDoAddress={this.clickDoAddress}
         />
 
+
         {this.state.lyftCost && this.state.uberPrice && this.state.uberTime && this.state.lyftETA
           ? <Comparison
             lyftCost={this.state.lyftCost}
@@ -243,12 +244,17 @@ class App extends Component {
           />
           : this.state.fetchingEstimates
             ? <Loader />
-            : <div></div>
-        }
-
-
+            : <div></div>}
       </div>
 
+        {this.state.uberPrice && this.state.uberTime && this.state.lyftCost && this.state.lyftETA
+        ? <Comparison 
+            lyftCost={this.state.lyftCost}
+            lyftETA={this.state.lyftETA}
+            uberPrice={this.state.uberPrice}
+            uberTime={this.state.uberTime}/> 
+        : <div></div> }
+      </div>
     );
   }
 }
