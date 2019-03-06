@@ -7,8 +7,8 @@ const Comparison = (props) => {
       <div className="row justify-content-center comparison">
         <div className="col-4 lyft text-center mt-3">
           <h2>Lyft</h2>
-          <p>Est Cost:</p>
-          <p>ETA:</p>
+          <p>Est Cost: ${props.lyftCost}</p>
+          <p>ETA: {props.lyftETA} min</p>
           <button type="button" className="btn btn-dark">Book</button>
         </div>
         <p className="mt-5">VS</p>
