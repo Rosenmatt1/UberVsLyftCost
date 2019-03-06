@@ -2,13 +2,14 @@ import React from 'react'
 import '../App.css'
 
 const Form = (props) => {
-  props.pickUpAddressState ? console.log("yes") : console.log("no")
+  console.log(props, 'props')
+  props.puAddress ? console.log("yes") : console.log("no")
   return (
     <div className="container text-center mt-1">
       <div className="row justify-content-center">
           <form className="col-10" onSubmit={props.searchPrices}>
             <div className="input-group mb-3">
-              <input id="autocomplete" onChange={props.pickUpAddress} type="address" className="form-control" placeholder="Enter Pick Up Location" value={props.pickUpAddressState}/>
+              <input id="autocomplete" onChange={props.pickUpAddress} type="address" className="form-control" placeholder="Enter Pick Up Location" value={props.puAddress}/>
             </div>
             {props.autocomplete 
               ? props.autocomplete.predictions.map((guess, idx) => 

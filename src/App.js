@@ -13,10 +13,14 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
-      uberPrice: null,
-      uberTime: null,
-      lyftCost: null,
-      lyftETA: null,
+      puAddress: '',
+      pickupAddress:'',
+      autocomplete: '',
+      lyftCost: '',
+      lyftETA: '',
+      dropoffLatLong: '',
+      pickupLatLong: '',
+
     }
   }
 
@@ -154,7 +158,7 @@ class App extends Component {
 
   pickUpAddress = async (e) => {
     console.log(e.target.value)
-    this.setState({pickupAddress: e.target.value})
+    this.setState({puAddress: e.target.value})
     await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${e.target.value}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg&sessiontoken=${localStorage.lyftjwt}`, {
       method: "GET",
       "Content-Type": "application/json",})
@@ -170,17 +174,19 @@ class App extends Component {
   }
 
   addressClick = (description) => {
-    this.setState({ pickupAddress: description })
+    this.setState({ puAddress: description })
   }
 
   render() {
+    console.log()
     return (
       <div>
         <Logo />
         <Form 
+          puAddress={this.state.puAddress}
           searchPrices={this.searchPrices}
           pickUpAddress={this.pickUpAddress}
-          pickUpAddressState={this.state.pickUpAddress}
+          // pickUpAddressState={this.state.pickUpAddress}
           autocomplete={this.state.autocomplete}
           addressClick={this.addressClick}
         />
