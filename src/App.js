@@ -5,6 +5,9 @@ import Comparison from './Components/Comparison.js'
 import Logo from './Components/Logo.js'
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 const lyftURL = 'https://api.lyft.com/'
+const proxyurl = "https://cors-anywhere.herokuapp.com/";
+const priceUrl = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075'
+const timeUrl = 'https://api.uber.com/v1.2/estimates/time?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075'
 
 class App extends Component {
   constructor() {
@@ -17,7 +20,50 @@ class App extends Component {
       lyftETA: '',
       dropoffLatLong: '',
       pickupLatLong: '',
+
     }
+  }
+
+  fetchUberPrice = async () => {
+    localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
+    await fetch(proxyurl + priceUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token " + localStorage.uberjwt
+      },
+    })
+      .then(response => response.json())
+      .then(prices => {
+        let avgPrice = (((prices.prices[0].low_estimate) + (prices.prices[0].high_estimate)) / 2)
+        this.setState({
+          uberPrice: avgPrice
+        })
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }
+
+  fetchUberTime = async () => {
+    localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
+    await fetch(proxyurl + timeUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token " + localStorage.uberjwt
+      },
+    })
+      .then(response => response.json())
+      .then(times => {
+        let timeMin = times.times[0].estimate / 60
+        this.setState({
+          uberTime: timeMin
+        })
+      })
+      .catch(error => {
+        console.error(error)
+      })
   }
 
   fetchHiddenLyftData = async () => {
@@ -81,6 +127,8 @@ class App extends Component {
 
   async componentDidMount() {
     await this.fetchHiddenLyftData()
+      this.fetchUberPrice()
+      this.fetchUberTime()
       .catch(err => console.error(err))
   }
 
@@ -143,7 +191,8 @@ class App extends Component {
           addressClick={this.addressClick}
         />
         <Comparison 
-          
+          uberPrice={this.state.uberPrice}
+          uberTime={this.state.uberTime}
         />
       </div>
 
