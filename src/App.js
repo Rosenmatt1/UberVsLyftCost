@@ -3,6 +3,7 @@ import './App.css';
 import Form from './Components/Form.js'
 import Comparison from './Components/Comparison.js'
 import Logo from './Components/Logo.js'
+import Loader from './Components/Loader.js'
 const lyftURL = 'https://api.lyft.com/'
 const uberUrl = 'https://api.uber.com/'
 
@@ -10,22 +11,23 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
-      uberPrice: '',
-      uberTime: '',
+      uberPrice: null,
+      uberTime: null,
       puAddress: '',
       doAddress: '',
       autocompletePu: '',
       autocompleteDo: '',
-      lyftCost: '',
-      lyftETA: '',
+      lyftCost: null,
+      lyftETA: null,
       dropoffLatLong: '',
-      pickupLatLong: ''
+      pickupLatLong: '',
+      fetchingEstimates: false,
     }
   }
 
   fetchUberPrice = async (startLat, startLong, endLat, endLong) => {
     localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
-  await fetch(`https://cors-anywhere.herokuapp.com/${uberUrl}v1.2/estimates/price?start_latitude=${startLat}&start_longitude=${startLong}&end_latitude=${endLat}&end_longitude=${endLong}`, {
+    await fetch(`https://cors-anywhere.herokuapp.com/${uberUrl}v1.2/estimates/price?start_latitude=${startLat}&start_longitude=${startLong}&end_latitude=${endLat}&end_longitude=${endLong}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -35,9 +37,11 @@ class App extends Component {
       .then(response => response.json())
       .then(prices => {
         let avgPrice = (((prices.prices[0].low_estimate) + (prices.prices[0].high_estimate)) / 2).toFixed(2)
+        console.log(typeof avgPrice)
         this.setState({
-          uberPrice: avgPrice
+          uberPrice: Number(avgPrice)
         })
+        console.log(typeof this.state.uberPrice)
       })
       .catch(error => {
         console.error(error)
@@ -53,6 +57,7 @@ class App extends Component {
         "Authorization": "Token " + localStorage.uberjwt
       },
     })
+
       .then(response => response.json())
       .then(times => {
         let timeMin = times.times[0].estimate / 60
@@ -96,9 +101,9 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(data => {
-        let avgCost = (((data.cost_estimates[0].estimated_cost_cents_max + data.cost_estimates[0].estimated_cost_cents_min)/2)/100).toFixed(2)
+        let avgCost = (((data.cost_estimates[0].estimated_cost_cents_max + data.cost_estimates[0].estimated_cost_cents_min) / 2) / 100).toFixed(2)
         this.setState({
-          lyftCost: avgCost
+          lyftCost: Number(avgCost)
         })
       })
       .catch(error => {
@@ -117,7 +122,7 @@ class App extends Component {
       .then(response => response.json())
       .then(data => {
         this.setState({
-          lyftETA: (data.eta_estimates[0].eta_seconds/60).toFixed(0)
+          lyftETA: (data.eta_estimates[0].eta_seconds / 60).toFixed(0)
         })
       })
       .catch(error => {
@@ -134,22 +139,27 @@ class App extends Component {
     e.preventDefault()
     const fromAddress = e.target[0].value
     const toAddress = e.target[1].value
-      await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${fromAddress}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
+    await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${fromAddress}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
       method: "GET",
-      "Content-Type": "application/json",})
+      "Content-Type": "application/json",
+    })
       .then(response => response.json())
       .then(data => {
-        this.setState({pickupLatLong: data.results[0].geometry.location})
+        this.setState({ pickupLatLong: data.results[0].geometry.location })
       })
       .catch(error => {
         console.error(error)
       })
-      await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${toAddress}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
+    await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${toAddress}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
       method: "GET",
-      "Content-Type": "application/json",})
+      "Content-Type": "application/json",
+    })
       .then(response => response.json())
       .then(data => {
-        this.setState({dropoffLatLong: data.results[0].geometry.location})
+        this.setState({
+          dropoffLatLong: data.results[0].geometry.location,
+          fetchingEstimates: true,
+        })
       })
       .catch(error => {
         console.error(error)
@@ -161,10 +171,11 @@ class App extends Component {
   }
 
   pickUpAddress = async (e) => {
-    this.setState({puAddress: e.target.value})
+    this.setState({ puAddress: e.target.value })
     await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${e.target.value}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg&sessiontoken=${localStorage.lyftjwt}`, {
       method: "GET",
-      "Content-Type": "application/json",})
+      "Content-Type": "application/json",
+    })
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -177,7 +188,7 @@ class App extends Component {
   }
 
   dropOffAddress = async (e) => {
-    this.setState({doAddress: e.target.value})
+    this.setState({ doAddress: e.target.value })
     await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${e.target.value}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg&sessiontoken=${localStorage.lyftjwt}`, {
       method: "GET",
       "Content-Type": "application/json",
@@ -194,7 +205,7 @@ class App extends Component {
   }
 
   addressClick = (description) => {
-    this.setState({ 
+    this.setState({
       puAddress: description,
       autocompletePu: ''
     })
@@ -203,7 +214,7 @@ class App extends Component {
   clickDoAddress = (description) => {
     this.setState({
       doAddress: description,
-      autocompleteDo: '' 
+      autocompleteDo: ''
     })
   }
 
@@ -211,7 +222,7 @@ class App extends Component {
     return (
       <div>
         <Logo />
-        <Form 
+        <Form
           puAddress={this.state.puAddress}
           doAddress={this.state.doAddress}
           searchPrices={this.searchPrices}
@@ -223,13 +234,17 @@ class App extends Component {
           clickDoAddress={this.clickDoAddress}
         />
 
-        {this.state.uberPrice && this.state.uberTime && this.state.lyftCost && this.state.lyftETA
-        ? <Comparison 
+
+        {this.state.lyftCost && this.state.uberPrice && this.state.uberTime && this.state.lyftETA
+          ? <Comparison
             lyftCost={this.state.lyftCost}
             lyftETA={this.state.lyftETA}
             uberPrice={this.state.uberPrice}
-            uberTime={this.state.uberTime}/> 
-        : <div></div> }
+            uberTime={this.state.uberTime}
+          />
+          : this.state.fetchingEstimates
+            ? <Loader />
+            : <div></div>}
       </div>
     );
   }

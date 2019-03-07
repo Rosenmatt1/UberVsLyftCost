@@ -2,7 +2,27 @@ import React from 'react'
 import '../App.css'
 import {Spring} from 'react-spring/renderprops';
 
-const Comparison = () => {
+const Comparison = (props) => {
+  const lyftPrice = props.lyftCost < props.uberPrice 
+                      ? 'lyftDeal'
+                      : props.lyftCost > props.uberPrice
+                        ?'badDealUber'
+                        : ''
+  const lyftTime = props.lyftETA < props.uberTime 
+                    ? 'lyftTime'
+                    : props.lyftETA > props.uberTime
+                      ? 'badTimeUber'
+                      : ''
+  const uberPrice = props.uberPrice < props.lyftCost
+                    ? 'uberDeal'
+                    : props.uberPrice > props.lyftCost
+                      ? 'badDealLyft'
+                      : ''
+  const uberTime = props.uberTime < props.lyftETA
+                    ? 'uberTime'
+                    : props.uberTime > props.lyftETA
+                      ? 'badTimeLyft'
+                      : ''                                       
   return (
     <Spring
       from={{opacity:0, marginBottom: -500}}
@@ -30,7 +50,6 @@ const Comparison = () => {
         </div>
       )}
     </Spring>
-    
   )
 }
 
