@@ -23,7 +23,6 @@ class App extends Component {
       dropoffLatLong: '',
       pickupLatLong: '',
       fetchingEstimates: false,
-      lyftRides: []
     }
   }
 
@@ -65,7 +64,7 @@ class App extends Component {
       .then(times => {
         let timeMin = times.times[0].estimate / 60
         this.setState({
-          uberTime: timeMin
+          uberTime: Number(timeMin)
         })
       })
       .catch(error => {
@@ -169,13 +168,14 @@ class App extends Component {
       .then(() => this.fetchUberTime(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng))
       .then(() => this.getLyftCost(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng, this.state.dropoffLatLong.lat, this.state.dropoffLatLong.lng))
       .then(() => this.getLyftETA(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng))
-      .then(() => this.postToDatabase())
+      .then(() => this.postLyftDatabase())
+      .then(() => this.postUberDatabase())
       .catch(error => {
         console.error(error)
       })
   }
 
-  postToDatabase = () => {
+  postLyftDatabase = () => {
     const lyftData = {
       eta_of_pickup: Number(this.state.lyftETA),
       estimated_price: Number(this.state.lyftCost)
@@ -184,6 +184,22 @@ class App extends Component {
     fetch(`${url}lyftRide/`, {
       method: 'POST',
       body: JSON.stringify(lyftData),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+  }
+
+  postUberDatabase = () => {
+    const uberData = {
+      eta_of_pickup: Number(this.state.uberTime),
+      estimated_price: Number(this.state.uberPrice)
+    }
+    console.log(uberData)
+    fetch(`${url}uberRide/`, {
+      method: 'POST',
+      body: JSON.stringify(uberData),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
