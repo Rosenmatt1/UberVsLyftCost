@@ -6,6 +6,7 @@ const Form = (props) => {
     <div className="container text-center mt-1">
       <div className="row justify-content-center">
           <form className="col-10" onSubmit={props.searchPrices}>
+
             <div className="input-group mb-3">
               <input id="autocomplete" onChange={props.pickUpAddress} type="address" className="form-control" placeholder="Enter Pick Up Location" value={props.puAddress}/>
             </div>
@@ -17,6 +18,7 @@ const Form = (props) => {
                   </ul>
                 </div>)
               : <div></div>}
+
             <div className="input-group mt-3 mb-3">
             <input id="autocomplete" onChange={props.dropOffAddress} type="address" className="form-control" placeholder="Enter Dropoff Location" value={props.doAddress}/>
             </div>
@@ -28,6 +30,7 @@ const Form = (props) => {
                 </ul>
               </div>)
             : <div></div>}
+            
             <button 
             type="submit" 
             className="btn btn-dark">Find the Best Deal</button>
