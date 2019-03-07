@@ -169,30 +169,27 @@ class App extends Component {
       .then(() => this.fetchUberTime(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng))
       .then(() => this.getLyftCost(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng, this.state.dropoffLatLong.lat, this.state.dropoffLatLong.lng))
       .then(() => this.getLyftETA(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng))
-      .then(() => {
-        const lyftData = {
-          eta_of_pickup: Number(this.state.lyftETA),
-          estimated_price: Number(this.state.lyftCost)
-        }
-        console.log(lyftData)
-        fetch(`${url}lyftRide/`, {
-          method: 'POST',
-          body: JSON.stringify(lyftData),
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          }
-        })
-        this.setState({
-          lyftRides: [...this.state.lyftRides, lyftData],
-        })
-      })
+      .then(() => this.postToDatabase())
       .catch(error => {
         console.error(error)
       })
   }
 
-
+  postToDatabase = () => {
+    const lyftData = {
+      eta_of_pickup: Number(this.state.lyftETA),
+      estimated_price: Number(this.state.lyftCost)
+    }
+    console.log(lyftData)
+    fetch(`${url}lyftRide/`, {
+      method: 'POST',
+      body: JSON.stringify(lyftData),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+  }
 
 
   pickUpAddress = async (e) => {
