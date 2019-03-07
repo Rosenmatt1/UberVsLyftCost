@@ -23,10 +23,10 @@ class App extends Component {
       dropoffLatLong: '',
       pickupLatLong: '',
       fetchingEstimates: false,
+      lyftId: [],
+      uberId: []
     }
   }
-
-
 
   fetchUberPrice = async (startLat, startLong, endLat, endLong) => {
     localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
@@ -189,7 +189,16 @@ class App extends Component {
         'Accept': 'application/json',
       }
     })
+      .then(lyftData => {
+        console.log(lyftData)
+        this.setState({
+          lyftId: lyftData
+        })
+      })
+    console.log(this.state.lyftId)
+    return lyftData
   }
+
 
   postUberDatabase = () => {
     const uberData = {
@@ -200,6 +209,60 @@ class App extends Component {
     fetch(`${url}uberRide/`, {
       method: 'POST',
       body: JSON.stringify(uberData),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+      .then(uberData => {
+        console.log(uberData)
+        this.setState({
+          uberId: uberData
+        })
+      })
+    console.log(this.state.uberId)
+    return uberData
+  }
+
+  selectedLyftRide = (e) => {
+    e.preventDefault()
+    console.log("e.target.value", e.target.value)
+    this.postLyftRide()
+  }
+
+  selectedUberRide = (e) => {
+    e.preventDefault()
+    console.log("e.target.value", e.target.value)
+    this.postUberRide()
+  }
+
+  postSelectedLyftRide = () => {
+    const rideData = {
+
+      eta_of_pickup: Number(this.state.lyftETA),
+      estimated_price: Number(this.state.lyftCost)
+    }
+    console.log(rideData)
+    fetch(`${url}ride/`, {
+      method: 'POST',
+      body: JSON.stringify(rideData),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+  }
+
+  postSelectedUberRide = () => {
+    const rideData = {
+
+      eta_of_pickup: Number(this.state.uberTime),
+      estimated_price: Number(this.state.uberPrice)
+    }
+    console.log(rideData)
+    fetch(`${url}ride/`, {
+      method: 'POST',
+      body: JSON.stringify(rideData),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -279,6 +342,7 @@ class App extends Component {
             lyftETA={this.state.lyftETA}
             uberPrice={this.state.uberPrice}
             uberTime={this.state.uberTime}
+            selectedRide={this.selectedRide}
           />
           : this.state.fetchingEstimates
             ? <Loader />
