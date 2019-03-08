@@ -6,7 +6,9 @@ import Logo from './Components/Logo.js'
 import Loader from './Components/Loader.js'
 const lyftURL = 'https://api.lyft.com/'
 const uberUrl = 'https://api.uber.com/'
-const url = 'http://localhost:3006/'
+// const url = 'http://localhost:3006/'
+const url = 'https://cors-anywhere.herokuapp.com/https://uber-vs-lyft.herokuapp.com/'
+
 
 class App extends Component {
   constructor() {
