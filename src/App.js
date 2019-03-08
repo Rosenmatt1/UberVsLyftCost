@@ -23,8 +23,6 @@ class App extends Component {
       dropoffLatLong: '',
       pickupLatLong: '',
       fetchingEstimates: false,
-      lyftId: [],
-      uberId: []
     }
   }
 
@@ -185,7 +183,6 @@ class App extends Component {
       eta_of_pickup: Number(this.state.lyftETA),
       estimated_price: Number(this.state.lyftCost)
     }
-    // console.log(lyftData)
     fetch(`${url}lyftRide/`, {
       method: 'POST',
       body: JSON.stringify(lyftData),
@@ -194,14 +191,6 @@ class App extends Component {
         'Accept': 'application/json',
       }
     })
-    //   .then(lyftData => {
-    //     console.log(lyftData)
-    //     this.setState({
-    //       lyftId: lyftData
-    //     })
-    //   })
-    // console.log(this.state.lyftId)
-    // return lyftData
   }
 
 
@@ -210,7 +199,6 @@ class App extends Component {
       eta_of_pickup: Number(this.state.uberTime),
       estimated_price: Number(this.state.uberPrice)
     }
-    // console.log(uberData)
     fetch(`${url}uberRide/`, {
       method: 'POST',
       body: JSON.stringify(uberData),
@@ -219,27 +207,15 @@ class App extends Component {
         'Accept': 'application/json',
       }
     })
-    //   .then(uberData => {
-    //     console.log(uberData)
-    //     this.setState({
-    //       uberId: uberData
-    //     })
-    //   })
-    // console.log(this.state.uberId)
-    // return uberData
   }
 
   selectedLyftRide = (e) => {
     e.preventDefault()
-    console.log("e", e)
-    // console.log("e.target.value", e.target.value)
     this.postSelectedLyftRide()
   }
 
   selectedUberRide = (e) => {
     e.preventDefault()
-    console.log("e", e)
-    // console.log("e.target.value", e.target.value)
     this.postSelectedUberRide()
   }
 
@@ -248,7 +224,7 @@ class App extends Component {
       eta_of_pickup: Number(this.state.lyftETA),
       estimated_price: Number(this.state.lyftCost)
     }
-    // console.log(rideData)
+
     fetch(`${url}ride/`, {
       method: 'POST',
       body: JSON.stringify(rideData),
@@ -257,9 +233,6 @@ class App extends Component {
         'Accept': 'application/json',
       }
     })
-    // this.setState({
-
-    // })
   }
 
   postSelectedUberRide = () => {
@@ -267,7 +240,6 @@ class App extends Component {
       eta_of_pickup: Number(this.state.uberTime),
       estimated_price: Number(this.state.uberPrice)
     }
-    console.log(rideData)
     fetch(`${url}ride/`, {
       method: 'POST',
       body: JSON.stringify(rideData),
