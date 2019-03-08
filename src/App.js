@@ -183,7 +183,6 @@ class App extends Component {
 
   postLyftDatabase = async () => {
     const lyftData = {
-      id: this.state.lyftData.id,
       eta_of_pickup: Number(this.state.lyftETA),
       estimated_price: Number(this.state.lyftCost)
     }
@@ -208,7 +207,6 @@ class App extends Component {
 
   postUberDatabase = async () => {
     const uberData = {
-      id: this.state.uberData.id,
       eta_of_pickup: Number(this.state.uberTime),
       estimated_price: Number(this.state.uberPrice)
     }
