@@ -8,7 +8,7 @@ const Logo = () => {
       <div className="row justify-content-center">
         <img className="mx-auto better" alt="Uber vs. Lyft" src={logo} />
         <div className="col-10">
-          <h1><span className="highlight text-light">Uber Vs. Lyft Comparison</span></h1>
+          {/* <h1><span className="highlight text-light">Uber Vs. Lyft Comparison</span></h1> */}
         </div>
       </div>
     </div>

@@ -30,7 +30,7 @@ const Form = (props) => {
             : <div></div>}
             <button 
             type="submit" 
-            className="btn btn-dark">Find the Best Deal</button>
+            className="btn btn-dark">Find the Better Deal</button>
           </form>
       </div>
     </div>
