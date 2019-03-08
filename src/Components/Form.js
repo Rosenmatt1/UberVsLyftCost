@@ -17,6 +17,7 @@ const Form = (props) => {
                   </ul>
                 </div>)
               : <div></div>}
+
             <div className="input-group mt-3 mb-3">
             <input id="autocomplete" onChange={props.dropOffAddress} type="address" className="form-control border-dark" placeholder="Enter Dropoff Location" value={props.doAddress}/>
             </div>
@@ -28,6 +29,7 @@ const Form = (props) => {
                 </ul>
               </div>)
             : <div></div>}
+            
             <button 
             type="submit" 
             className="btn btn-dark">Find the Better Deal</button>

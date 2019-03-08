@@ -6,6 +6,7 @@ import Logo from './Components/Logo.js'
 import Loader from './Components/Loader.js'
 const lyftURL = 'https://api.lyft.com/'
 const uberUrl = 'https://api.uber.com/'
+const url = 'http://localhost:3006/'
 
 class App extends Component {
   constructor() {
@@ -22,6 +23,8 @@ class App extends Component {
       dropoffLatLong: '',
       pickupLatLong: '',
       fetchingEstimates: false,
+      lyftId: [],
+      uberId: []
     }
   }
 
@@ -37,11 +40,10 @@ class App extends Component {
       .then(response => response.json())
       .then(prices => {
         let avgPrice = (((prices.prices[0].low_estimate) + (prices.prices[0].high_estimate)) / 2).toFixed(2)
-        console.log(typeof avgPrice)
         this.setState({
           uberPrice: Number(avgPrice)
         })
-        console.log(typeof this.state.uberPrice)
+        console.log("Uber price", typeof this.state.uberPrice)
       })
       .catch(error => {
         console.error(error)
@@ -50,19 +52,19 @@ class App extends Component {
 
   fetchUberTime = async (startLat, startLong, endLat, endLong) => {
     localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
-    await fetch(`https://cors-anywhere.herokuapp.com/${uberUrl}v1.2/estimates/time?start_latitude=${startLat}&start_longitude=${startLong}&end_latitude=${endLat}&end_longitude=${endLong}`
-      , {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Token " + localStorage.uberjwt
-        },
-      })
+    await fetch(`https://cors-anywhere.herokuapp.com/${uberUrl}v1.2/estimates/time?start_latitude=${startLat}&start_longitude=${startLong}&end_latitude=${endLat}&end_longitude=${endLong}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token " + localStorage.uberjwt
+      },
+    })
+
       .then(response => response.json())
       .then(times => {
         let timeMin = times.times[0].estimate / 60
         this.setState({
-          uberTime: timeMin
+          uberTime: Number(timeMin)
         })
       })
       .catch(error => {
@@ -105,6 +107,7 @@ class App extends Component {
         this.setState({
           lyftCost: Number(avgCost)
         })
+        console.log(typeof this.state.lyftCost)
       })
       .catch(error => {
         console.error(error)
@@ -166,14 +169,112 @@ class App extends Component {
           dropoffLatLong: data.results[0].geometry.location
         })
       })
+      .then(() => this.fetchUberPrice(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng, this.state.dropoffLatLong.lat, this.state.dropoffLatLong.lng))
+      .then(() => this.fetchUberTime(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng))
+      .then(() => this.getLyftCost(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng, this.state.dropoffLatLong.lat, this.state.dropoffLatLong.lng))
+      .then(() => this.getLyftETA(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng))
+      .then(() => this.postLyftDatabase())
+      .then(() => this.postUberDatabase())
       .catch(error => {
         console.error(error)
       })
-    this.fetchUberPrice(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng, this.state.dropoffLatLong.lat, this.state.dropoffLatLong.lng)
-    this.fetchUberTime(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng)
-    this.getLyftCost(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng, this.state.dropoffLatLong.lat, this.state.dropoffLatLong.lng)
-    this.getLyftETA(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng)
   }
+
+  postLyftDatabase = () => {
+    const lyftData = {
+      eta_of_pickup: Number(this.state.lyftETA),
+      estimated_price: Number(this.state.lyftCost)
+    }
+    console.log(lyftData)
+    fetch(`${url}lyftRide/`, {
+      method: 'POST',
+      body: JSON.stringify(lyftData),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+      .then(lyftData => {
+        console.log(lyftData)
+        this.setState({
+          lyftId: lyftData
+        })
+      })
+    console.log(this.state.lyftId)
+    return lyftData
+  }
+
+
+  postUberDatabase = () => {
+    const uberData = {
+      eta_of_pickup: Number(this.state.uberTime),
+      estimated_price: Number(this.state.uberPrice)
+    }
+    console.log(uberData)
+    fetch(`${url}uberRide/`, {
+      method: 'POST',
+      body: JSON.stringify(uberData),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+      .then(uberData => {
+        console.log(uberData)
+        this.setState({
+          uberId: uberData
+        })
+      })
+    console.log(this.state.uberId)
+    return uberData
+  }
+
+  selectedLyftRide = (e) => {
+    e.preventDefault()
+    console.log("e.target.value", e.target.value)
+    this.postLyftRide()
+  }
+
+  selectedUberRide = (e) => {
+    e.preventDefault()
+    console.log("e.target.value", e.target.value)
+    this.postUberRide()
+  }
+
+  postSelectedLyftRide = () => {
+    const rideData = {
+
+      eta_of_pickup: Number(this.state.lyftETA),
+      estimated_price: Number(this.state.lyftCost)
+    }
+    console.log(rideData)
+    fetch(`${url}ride/`, {
+      method: 'POST',
+      body: JSON.stringify(rideData),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+  }
+
+  postSelectedUberRide = () => {
+    const rideData = {
+
+      eta_of_pickup: Number(this.state.uberTime),
+      estimated_price: Number(this.state.uberPrice)
+    }
+    console.log(rideData)
+    fetch(`${url}ride/`, {
+      method: 'POST',
+      body: JSON.stringify(rideData),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+  }
+
 
   pickUpAddress = async (e) => {
     this.setState({ puAddress: e.target.value })
@@ -246,6 +347,7 @@ class App extends Component {
             lyftETA={this.state.lyftETA}
             uberPrice={this.state.uberPrice}
             uberTime={this.state.uberTime}
+            selectedRide={this.selectedRide}
           />
           : this.state.fetchingEstimates
             ? <Loader />
