@@ -47,8 +47,8 @@ const Comparison = (props) => {
                   onClick={(e) => props.selectedLyftRide(e)}
                   type="button"
                   className="btn btn-dark mb-3">
-                  Book
-          </button>
+                  {props.orderedLyft ? "Ordered" : "Book"}
+                </button>
               </div>
               <div className="uber col-4 text-center mt-3 card ml-3 border-dark">
                 <div>
@@ -60,7 +60,7 @@ const Comparison = (props) => {
                   onClick={(e) => props.selectedUberRide(e)}
                   type="button"
                   className="btn btn-dark mb-3">
-                  Book
+                  {props.orderedUber ? "Ordered" : "Book"}
                 </button>
               </div>
             </div>

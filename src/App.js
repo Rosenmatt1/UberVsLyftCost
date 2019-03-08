@@ -23,8 +23,10 @@ class App extends Component {
       dropoffLatLong: '',
       pickupLatLong: '',
       fetchingEstimates: false,
-      lyftId: [],
-      uberId: []
+      orderedLyft: false,
+      orderedUber: false,
+      uberData: [],
+      lyftData: []
     }
   }
 
@@ -43,7 +45,6 @@ class App extends Component {
         this.setState({
           uberPrice: Number(avgPrice)
         })
-        console.log("Uber price", typeof this.state.uberPrice)
       })
       .catch(error => {
         console.error(error)
@@ -59,7 +60,6 @@ class App extends Component {
         "Authorization": "Token " + localStorage.uberjwt
       },
     })
-
       .then(response => response.json())
       .then(times => {
         let timeMin = times.times[0].estimate / 60
@@ -145,7 +145,8 @@ class App extends Component {
       uberPrice: null,
       uberTime: null,
       lyftCost: null,
-      lyftETA: null})
+      lyftETA: null
+    })
     const fromAddress = e.target[0].value
     const toAddress = e.target[1].value
     await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${fromAddress}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
@@ -154,7 +155,7 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(data => {
-        this.setState({pickupLatLong: data.results[0].geometry.location})
+        this.setState({ pickupLatLong: data.results[0].geometry.location })
       })
       .catch(error => {
         console.error(error)
@@ -180,13 +181,14 @@ class App extends Component {
       })
   }
 
-  postLyftDatabase = () => {
+  postLyftDatabase = async () => {
     const lyftData = {
+      id: this.state.lyftData.id,
       eta_of_pickup: Number(this.state.lyftETA),
       estimated_price: Number(this.state.lyftCost)
     }
-    // console.log(lyftData)
-    fetch(`${url}lyftRide/`, {
+    console.log(lyftData)
+    await fetch(`${url}lyftRide/`, {
       method: 'POST',
       body: JSON.stringify(lyftData),
       headers: {
@@ -194,24 +196,24 @@ class App extends Component {
         'Accept': 'application/json',
       }
     })
-    //   .then(lyftData => {
-    //     console.log(lyftData)
-    //     this.setState({
-    //       lyftId: lyftData
-    //     })
-    //   })
-    // console.log(this.state.lyftId)
-    // return lyftData
+      .then(data => data.json())
+      .then(lyft => {
+        // console.log(lyft)
+        this.setState({
+          lyftData: lyft[0]
+        })
+      })
   }
 
 
-  postUberDatabase = () => {
+  postUberDatabase = async () => {
     const uberData = {
+      id: this.state.uberData.id,
       eta_of_pickup: Number(this.state.uberTime),
       estimated_price: Number(this.state.uberPrice)
     }
-    // console.log(uberData)
-    fetch(`${url}uberRide/`, {
+    console.log(uberData)
+    await fetch(`${url}uberRide/`, {
       method: 'POST',
       body: JSON.stringify(uberData),
       headers: {
@@ -219,36 +221,37 @@ class App extends Component {
         'Accept': 'application/json',
       }
     })
-    //   .then(uberData => {
-    //     console.log(uberData)
-    //     this.setState({
-    //       uberId: uberData
-    //     })
-    //   })
-    // console.log(this.state.uberId)
-    // return uberData
+      .then(data => data.json())
+      .then(uber => {
+        // console.log(uber)
+        this.setState({
+          uberData: uber[0]
+        })
+      })
   }
 
   selectedLyftRide = (e) => {
     e.preventDefault()
-    console.log("e", e)
-    // console.log("e.target.value", e.target.value)
     this.postSelectedLyftRide()
+    this.setState({
+      orderedLyft: true
+    })
   }
 
   selectedUberRide = (e) => {
     e.preventDefault()
-    console.log("e", e)
-    // console.log("e.target.value", e.target.value)
     this.postSelectedUberRide()
+    this.setState({
+      orderedUber: true
+    })
   }
 
   postSelectedLyftRide = () => {
     const rideData = {
-      eta_of_pickup: Number(this.state.lyftETA),
-      estimated_price: Number(this.state.lyftCost)
+      lyft_id: this.state.lyftData.id,
+      eta_of_pickup: Number(this.state.lyftData.eta_of_pickup),
+      estimated_price: Number(this.state.lyftData.estimated_price)
     }
-    // console.log(rideData)
     fetch(`${url}ride/`, {
       method: 'POST',
       body: JSON.stringify(rideData),
@@ -257,17 +260,14 @@ class App extends Component {
         'Accept': 'application/json',
       }
     })
-    // this.setState({
-
-    // })
   }
 
   postSelectedUberRide = () => {
     const rideData = {
-      eta_of_pickup: Number(this.state.uberTime),
-      estimated_price: Number(this.state.uberPrice)
+      uber_id: this.state.uberData.id,
+      eta_of_pickup: Number(this.state.uberData.eta_of_pickup),
+      estimated_price: Number(this.state.uberData.estimated_price)
     }
-    console.log(rideData)
     fetch(`${url}ride/`, {
       method: 'POST',
       body: JSON.stringify(rideData),
@@ -352,6 +352,8 @@ class App extends Component {
             uberTime={this.state.uberTime}
             selectedLyftRide={this.selectedLyftRide}
             selectedUberRide={this.selectedUberRide}
+            orderedLyft={this.state.orderedLyft}
+            orderedUber={this.state.orderedUber}
           />
           : this.state.fetchingEstimates
             ? <Loader />
