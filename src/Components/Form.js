@@ -5,9 +5,9 @@ const Form = (props) => {
   return (
     <div className="container text-center mt-1">
       <div className="row justify-content-center">
-          <form className="col-10" onSubmit={props.searchPrices}>
+          <form className="col-md-8" onSubmit={props.searchPrices}>
             <div className="input-group mb-3">
-              <input id="autocomplete" onChange={props.pickUpAddress} type="address" className="form-control" placeholder="Enter Pick Up Location" value={props.puAddress}/>
+              <input id="autocomplete" onChange={props.pickUpAddress} type="address" className="form-control border-dark" placeholder="Enter Pick Up Location" value={props.puAddress}/>
             </div>
             {props.autocompletePu
               ? props.autocompletePu.predictions.map((guess, idx) => 
@@ -18,7 +18,7 @@ const Form = (props) => {
                 </div>)
               : <div></div>}
             <div className="input-group mt-3 mb-3">
-            <input id="autocomplete" onChange={props.dropOffAddress} type="address" className="form-control" placeholder="Enter Dropoff Location" value={props.doAddress}/>
+            <input id="autocomplete" onChange={props.dropOffAddress} type="address" className="form-control border-dark" placeholder="Enter Dropoff Location" value={props.doAddress}/>
             </div>
           {props.autocompleteDo
             ? props.autocompleteDo.predictions.map((guess, idx) =>
