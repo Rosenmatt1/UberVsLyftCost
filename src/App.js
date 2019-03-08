@@ -140,6 +140,12 @@ class App extends Component {
 
   searchPrices = async (e) => {
     e.preventDefault()
+    this.setState({
+      fetchingEstimates: true,
+      uberPrice: null,
+      uberTime: null,
+      lyftCost: null,
+      lyftETA: null})
     const fromAddress = e.target[0].value
     const toAddress = e.target[1].value
     await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${fromAddress}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
@@ -148,7 +154,7 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(data => {
-        this.setState({ pickupLatLong: data.results[0].geometry.location })
+        this.setState({pickupLatLong: data.results[0].geometry.location})
       })
       .catch(error => {
         console.error(error)
@@ -160,8 +166,7 @@ class App extends Component {
       .then(response => response.json())
       .then(data => {
         this.setState({
-          dropoffLatLong: data.results[0].geometry.location,
-          fetchingEstimates: true,
+          dropoffLatLong: data.results[0].geometry.location
         })
       })
       .then(() => this.fetchUberPrice(this.state.pickupLatLong.lat, this.state.pickupLatLong.lng, this.state.dropoffLatLong.lat, this.state.dropoffLatLong.lng))

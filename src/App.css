@@ -1,26 +1,44 @@
 body {
-  background-image: url("lyftuber.png");
-  height: 100%;
-  background-position: center;
-  background-repeat: repeat;
-  background-size: 400px;
+  background: url("lyftuber.png") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
+@media only screen and (max-width: 600px) {
+  body {
+    background-image: url("lyftuber.png");
+    height: 100%;
+    background-position: center;
+    background-repeat: repeat;
+    background-size: 400px;
+  }
+}
 .highlight {
-  background-color: white;
+  background-color: black;
 }
 
-img {
-  width: 25%;
-  height: 25%;
-  
+.better {
+  width: 40%;
+  height: 40%;
+}
+
+.loader {
+  width: 120px;
+  height: 120px;
+}
+
+.logo {
+  height: 60px;
+  /* width: auto; */
 }
 
 /* .comparison {
   background-color: white;
-}
+} */
 
-.uber {
+/* .uber {
   height: 40vh;
   background-color: white;
 }
@@ -31,49 +49,49 @@ img {
 } */
 
 .list-group-item:hover {
-  background-color: #373296;
+  background-color:black;
   color:white;
 }
 
-.btn {
-  background-color: #373296;
+/* .btn {
+  background-color: black;
   color: white 
-}
+} */
 
 .lyftDeal {
-  background-color:limegreen;
+  background-color: #ce005f;
   color: white;
 }
 
 .uberDeal {
-  background-color: limegreen;
+  background-color: black;
   color: white;
 }
 .lyftTime {
-  background-color: limegreen;
+  background-color: #ce005f;
   color: white;
 }
 .uberTime {
-  background-color: limegreen;
+  background-color: black;
   color: white;
 }
 
 .badTimeUber{
-  background-color: red;
-  color: white;
+  /* background-color: red; */
+  color: black;
 }
 .badTimeLyft{
-  background-color: red;
-  color: white;
+  /* background-color: red; */
+  color: black;
 
 }
 .badDealUber{
-  background-color: red;
-  color: white;
+  /* background-color: red; */
+  color: black;
 
 }
 .badDealLyft{
-  background-color: red;
-  color: white;
+  /* background-color: red; */
+  color: black;
 
 }
