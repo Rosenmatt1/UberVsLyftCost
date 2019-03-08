@@ -23,6 +23,9 @@ class App extends Component {
       dropoffLatLong: '',
       pickupLatLong: '',
       fetchingEstimates: false,
+      orderedLyft: false,
+      orderedUber: false,
+
     }
   }
 
@@ -212,11 +215,17 @@ class App extends Component {
   selectedLyftRide = (e) => {
     e.preventDefault()
     this.postSelectedLyftRide()
+    this.setState({
+      orderedLyft: true
+    })
   }
 
   selectedUberRide = (e) => {
     e.preventDefault()
     this.postSelectedUberRide()
+    this.setState({
+      orderedUber: true
+    })
   }
 
   postSelectedLyftRide = () => {
@@ -224,7 +233,6 @@ class App extends Component {
       eta_of_pickup: Number(this.state.lyftETA),
       estimated_price: Number(this.state.lyftCost)
     }
-
     fetch(`${url}ride/`, {
       method: 'POST',
       body: JSON.stringify(rideData),
@@ -324,6 +332,8 @@ class App extends Component {
             uberTime={this.state.uberTime}
             selectedLyftRide={this.selectedLyftRide}
             selectedUberRide={this.selectedUberRide}
+            orderedLyft={this.state.orderedLyft}
+            orderedUber={this.state.orderedUber}
           />
           : this.state.fetchingEstimates
             ? <Loader />
