@@ -15,11 +15,33 @@
     <link rel="dns-prefetch" href="https://api.uber.com/">
     <link rel="dns-prefetch" href="https://cors-anywhere.herokuapp.com/">
     <link rel="dns-prefetch" href="https://maps.googleapis.com/">
-    <title>Uber Vs. Lyft</title>
+
+    <div className="bg">
+      <div id="root"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyACbzw53c9p8bZa7mQv64uREVJOD8rHYqE",
+        authDomain: "ubervslyftapp.firebaseapp.com",
+        databaseURL: "https://ubervslyftapp.firebaseio.com",
+        projectId: "ubervslyftapp",
+        storageBucket: "",
+        messagingSenderId: "1015378371909"
+      };
+      firebase.initializeApp(config);
+    </script>
+
+    <meta property="og:url" content="https://ubervslyftapp.firebaseapp.com/" />
+    <meta property="og:description" content="Uber vs Lyft" />
+    <meta property="og:image" content="%PUBLIC_URL%/uber-vs-lyft.png" />
+    
+    <title>Uber Vs Lyft</title>
+
   </head>
   <body>
-      <div className="bg">
-        <div id="root"></div>
-      </div>
+      
   </body>
 </html>
