@@ -15,7 +15,9 @@ class App extends Component {
     super()
     this.state = {
       uberPrice: null,
+      hardCodedUberPrice: 10,
       uberTime: null,
+      hardCodedUberTime: 5,
       puAddress: '',
       doAddress: '',
       autocompletePu: '',
@@ -190,7 +192,6 @@ class App extends Component {
         })
       })
   }
-
 
   postUberDatabase = async () => {
     const uberData = {
