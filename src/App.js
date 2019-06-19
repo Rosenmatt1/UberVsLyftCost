@@ -5,7 +5,7 @@ import Comparison from './Components/Comparison.js'
 import Logo from './Components/Logo.js'
 import Loader from './Components/Loader.js'
 const lyftURL = 'https://api.lyft.com/'
-const uberUrl = 'https://api.uber.com/'
+// const uberUrl = 'https://api.uber.com/'
 // const url = 'http://localhost:3006/'
 const url = 'https://cors-anywhere.herokuapp.com/https://uber-vs-lyft.herokuapp.com/'
 
@@ -333,12 +333,14 @@ class App extends Component {
         />
 
 
-        {this.state.lyftCost && this.state.uberPrice && this.state.uberTime && this.state.lyftETA
+        {this.state.lyftCost && this.state.hardCodedUberPrice && this.state.hardCodedUberTime && this.state.lyftETA
           ? <Comparison
             lyftCost={this.state.lyftCost}
             lyftETA={this.state.lyftETA}
-            uberPrice={this.state.uberPrice}
-            uberTime={this.state.uberTime}
+            // uberPrice={this.state.uberPrice}
+            // uberTime={this.state.uberTime}
+            hardCodedUberPrice={this.state.hardCodedUberPrice}
+            hardCodedUberTime={this.state.hardCodedUberTime}
             selectedLyftRide={this.selectedLyftRide}
             selectedUberRide={this.selectedUberRide}
             orderedLyft={this.state.orderedLyft}
