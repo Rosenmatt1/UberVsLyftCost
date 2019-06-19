@@ -34,47 +34,47 @@ class App extends Component {
     }
   }
 
-  fetchUberPrice = async (startLat, startLong, endLat, endLong) => {
-    localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
-    await fetch(`https://cors-anywhere.herokuapp.com/${uberUrl}v1.2/estimates/price?start_latitude=${startLat}&start_longitude=${startLong}&end_latitude=${endLat}&end_longitude=${endLong}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Token " + localStorage.uberjwt
-      },
-    })
-      .then(response => response.json())
-      .then(prices => {
-        let avgPrice = (((prices.prices[0].low_estimate) + (prices.prices[0].high_estimate)) / 2).toFixed(2)
-        this.setState({
-          uberPrice: Number(avgPrice)
-        })
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }
+  // fetchUberPrice = async (startLat, startLong, endLat, endLong) => {
+  //   localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
+  //   await fetch(`https://cors-anywhere.herokuapp.com/${uberUrl}v1.2/estimates/price?start_latitude=${startLat}&start_longitude=${startLong}&end_latitude=${endLat}&end_longitude=${endLong}`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Token " + localStorage.uberjwt
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(prices => {
+  //       let avgPrice = (((prices.prices[0].low_estimate) + (prices.prices[0].high_estimate)) / 2).toFixed(2)
+  //       this.setState({
+  //         uberPrice: Number(avgPrice)
+  //       })
+  //     })
+  //     .catch(error => {
+  //       console.error(error)
+  //     })
+  // }
 
-  fetchUberTime = async (startLat, startLong, endLat, endLong) => {
-    localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
-    await fetch(`https://cors-anywhere.herokuapp.com/${uberUrl}v1.2/estimates/time?start_latitude=${startLat}&start_longitude=${startLong}&end_latitude=${endLat}&end_longitude=${endLong}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Token " + localStorage.uberjwt
-      },
-    })
-      .then(response => response.json())
-      .then(times => {
-        let timeMin = times.times[0].estimate / 60
-        this.setState({
-          uberTime: Number(timeMin)
-        })
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }
+  // fetchUberTime = async (startLat, startLong, endLat, endLong) => {
+  //   localStorage.setItem('uberjwt', 'aA-_gAKRRkPR_7fIhmMU-3IQGKVAYkMKCrMGq5A1')
+  //   await fetch(`https://cors-anywhere.herokuapp.com/${uberUrl}v1.2/estimates/time?start_latitude=${startLat}&start_longitude=${startLong}&end_latitude=${endLat}&end_longitude=${endLong}`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Token " + localStorage.uberjwt
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(times => {
+  //       let timeMin = times.times[0].estimate / 60
+  //       this.setState({
+  //         uberTime: Number(timeMin)
+  //       })
+  //     })
+  //     .catch(error => {
+  //       console.error(error)
+  //     })
+  // }
 
   fetchHiddenLyftData = async () => {
     await fetch(`${lyftURL}oauth/token`, {
@@ -165,7 +165,10 @@ class App extends Component {
     Promise.all([this.fromAddressGoogle(fromAddress), this.toAddressGoogle(toAddress)])
       .then(() => {
         const puLat = this.state.pickupLatLong.lat; const puLong = this.state.pickupLatLong.lng; const doLat = this.state.dropoffLatLong.lat; const doLong = this.state.dropoffLatLong.lng
-        Promise.all([this.fetchUberPrice(puLat, puLong, doLat, doLong), this.fetchUberTime(puLat, puLong), this.getLyftCost(puLat, puLong, doLat, doLong), this.getLyftETA(puLat, puLong)])
+        Promise.all([
+          // this.fetchUberPrice(puLat, puLong, doLat, doLong), 
+          // this.fetchUberTime(puLat, puLong),    
+          this.getLyftCost(puLat, puLong, doLat, doLong), this.getLyftETA(puLat, puLong)])
       })
       .then(() => Promise.all([this.postLyftDatabase(), this.postUberDatabase()])).catch(error => console.error(error))
   }
@@ -195,8 +198,8 @@ class App extends Component {
 
   postUberDatabase = async () => {
     const uberData = {
-      eta_of_pickup: Number(this.state.uberTime),
-      estimated_price: Number(this.state.uberPrice)
+      eta_of_pickup: Number(this.state.hardCodedUberTime),
+      estimated_price: Number(this.state.hardCodedUberPrice)
     }
     console.log(uberData)
     await fetch(`${url}uberRide/`, {
@@ -251,8 +254,8 @@ class App extends Component {
   postSelectedUberRide = () => {
     const rideData = {
       uber_id: this.state.uberData.id,
-      eta_of_pickup: Number(this.state.uberData.eta_of_pickup),
-      estimated_price: Number(this.state.uberData.estimated_price)
+      eta_of_pickup: Number(this.state.hardCodedUberPrice),
+      estimated_price: Number(this.state.hardCodedUberTime)
     }
     fetch(`${url}ride/`, {
       method: 'POST',
