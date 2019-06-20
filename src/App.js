@@ -4,8 +4,8 @@ import Form from './Components/Form.js'
 import Comparison from './Components/Comparison.js'
 import Logo from './Components/Logo.js'
 import Loader from './Components/Loader.js'
-const lyftURL = 'https://api.lyft.com/'
-const uberUrl = 'https://api.uber.com/'
+// const lyftURL = 'https://api.lyft.com/'
+// const uberUrl = 'https://api.uber.com/'
 // const url = 'http://localhost:3006/'
 const url = 'https://cors-anywhere.herokuapp.com/https://uber-vs-lyft.herokuapp.com/'
 
@@ -23,7 +23,9 @@ class App extends Component {
       autocompletePu: '',
       autocompleteDo: '',
       lyftCost: null,
+      hardCodedLyftCost: 8,
       lyftETA: null,
+      hardCodedLyftETA: 4,
       dropoffLatLong: '',
       pickupLatLong: '',
       fetchingEstimates: false,
@@ -76,66 +78,66 @@ class App extends Component {
   //     })
   // }
 
-  fetchHiddenLyftData = async () => {
-    await fetch(`${lyftURL}oauth/token`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Basic VFlndXhSdTlvWTdVOmpyLVRfYm9vOFJobFNtek1VZlhndkN0bDN5SnRnWWNB"
-      },
-      body: JSON.stringify({
-        "grant_type": "client_credentials",
-        "scope": "public"
-      }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        localStorage.setItem('lyftjwt', data.access_token)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }
+  // fetchHiddenLyftData = async () => {
+  //   await fetch(`${lyftURL}oauth/token`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Basic VFlndXhSdTlvWTdVOmpyLVRfYm9vOFJobFNtek1VZlhndkN0bDN5SnRnWWNB"
+  //     },
+  //     body: JSON.stringify({
+  //       "grant_type": "client_credentials",
+  //       "scope": "public"
+  //     }),
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       localStorage.setItem('lyftjwt', data.access_token)
+  //     })
+  //     .catch(error => {
+  //       console.error(error)
+  //     })
+  // }
 
-  getLyftCost = async (startLat, startLong, endLat, endLong) => {
-    await fetch(`https://cors-anywhere.herokuapp.com/${lyftURL}v1/cost?start_lat=${startLat}&start_lng=${startLong}&end_lat=${endLat}&end_lng=${endLong}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.lyftjwt
-      }
-    })
-      .then(response => response.json())
-      .then(data => {
-        let avgCost = (((data.cost_estimates[0].estimated_cost_cents_max + data.cost_estimates[0].estimated_cost_cents_min) / 2) / 100).toFixed(2)
-        this.setState({
-          lyftCost: Number(avgCost)
-        })
-        console.log(typeof this.state.lyftCost)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }
+  // getLyftCost = async (startLat, startLong, endLat, endLong) => {
+  //   await fetch(`https://cors-anywhere.herokuapp.com/${lyftURL}v1/cost?start_lat=${startLat}&start_lng=${startLong}&end_lat=${endLat}&end_lng=${endLong}`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Bearer " + localStorage.lyftjwt
+  //     }
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       let avgCost = (((data.cost_estimates[0].estimated_cost_cents_max + data.cost_estimates[0].estimated_cost_cents_min) / 2) / 100).toFixed(2)
+  //       this.setState({
+  //         lyftCost: Number(avgCost)
+  //       })
+  //       console.log(typeof this.state.lyftCost)
+  //     })
+  //     .catch(error => {
+  //       console.error(error)
+  //     })
+  // }
 
-  getLyftETA = async (startLat, startLong) => {
-    await fetch(`https://cors-anywhere.herokuapp.com/${lyftURL}v1/eta?lat=${startLat}&lng=${startLong}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.lyftjwt
-      }
-    })
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          lyftETA: (data.eta_estimates[0].eta_seconds / 60).toFixed(0)
-        })
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }
+  // getLyftETA = async (startLat, startLong) => {
+  //   await fetch(`https://cors-anywhere.herokuapp.com/${lyftURL}v1/eta?lat=${startLat}&lng=${startLong}`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Bearer " + localStorage.lyftjwt
+  //     }
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       this.setState({
+  //         lyftETA: (data.eta_estimates[0].eta_seconds / 60).toFixed(0)
+  //       })
+  //     })
+  //     .catch(error => {
+  //       console.error(error)
+  //     })
+  // }
 
   async componentDidMount() {
     await this.fetchHiddenLyftData()
@@ -164,19 +166,22 @@ class App extends Component {
     const fromAddress = e.target[0].value; const toAddress = e.target[1].value
     Promise.all([this.fromAddressGoogle(fromAddress), this.toAddressGoogle(toAddress)])
       .then(() => {
-        const puLat = this.state.pickupLatLong.lat; const puLong = this.state.pickupLatLong.lng; const doLat = this.state.dropoffLatLong.lat; const doLong = this.state.dropoffLatLong.lng
-        Promise.all([
-          // this.fetchUberPrice(puLat, puLong, doLat, doLong), 
-          // this.fetchUberTime(puLat, puLong),    
-          this.getLyftCost(puLat, puLong, doLat, doLong), this.getLyftETA(puLat, puLong)])
+        const puLat = this.state.pickupLatLong.lat; 
+        const puLong = this.state.pickupLatLong.lng; 
+        const doLat = this.state.dropoffLatLong.lat; 
+        const doLong = this.state.dropoffLatLong.lng
+        // Promise.all([
+        //   this.fetchUberPrice(puLat, puLong, doLat, doLong), 
+        //   this.fetchUberTime(puLat, puLong),    
+        //   this.getLyftCost(puLat, puLong, doLat, doLong), this.getLyftETA(puLat, puLong)])
       })
       .then(() => Promise.all([this.postLyftDatabase(), this.postUberDatabase()])).catch(error => console.error(error))
   }
 
   postLyftDatabase = async () => {
     const lyftData = {
-      eta_of_pickup: Number(this.state.lyftETA),
-      estimated_price: Number(this.state.lyftCost)
+      eta_of_pickup: Number(this.state.hardCodedLyftETA),
+      estimated_price: Number(this.state.hardCodedLyftCost)
     }
     console.log(lyftData)
     await fetch(`${url}lyftRide/`, {
@@ -238,8 +243,8 @@ class App extends Component {
   postSelectedLyftRide = () => {
     const rideData = {
       lyft_id: this.state.lyftData.id,
-      eta_of_pickup: Number(this.state.lyftData.eta_of_pickup),
-      estimated_price: Number(this.state.lyftData.estimated_price)
+      eta_of_pickup: Number(this.state.hardCodedLyftETA),
+      estimated_price: Number(this.state.hardCodedLyftPrice)
     }
     fetch(`${url}ride/`, {
       method: 'POST',
@@ -333,12 +338,16 @@ class App extends Component {
         />
 
 
-        {this.state.lyftCost && this.state.uberPrice && this.state.uberTime && this.state.lyftETA
+        {this.state.hardCodedLyftCost && this.state.hardCodedUberPrice && this.state.hardCodedUberTime && this.state.hardCodedLyftETA
           ? <Comparison
-            lyftCost={this.state.lyftCost}
-            lyftETA={this.state.lyftETA}
-            uberPrice={this.state.uberPrice}
-            uberTime={this.state.uberTime}
+            // lyftCost={this.state.lyftCost}
+            // lyftETA={this.state.lyftETA}
+            // uberPrice={this.state.uberPrice}
+            // uberTime={this.state.uberTime}
+            hardCodedUberPrice={this.state.hardCodedUberPrice}
+            hardCodedUberTime={this.state.hardCodedUberTime}
+            hardCodedLyftCost={this.state.hardCodedLyftCost}
+            hardCodedLyftETA={this.state.hardCodedLyftETA}
             selectedLyftRide={this.selectedLyftRide}
             selectedUberRide={this.selectedUberRide}
             orderedLyft={this.state.orderedLyft}
