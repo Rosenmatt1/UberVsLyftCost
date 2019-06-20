@@ -139,10 +139,10 @@ class App extends Component {
   //     })
   // }
 
-  async componentDidMount() {
-    await this.fetchHiddenLyftData()
-      .catch(err => console.error(err))
-  }
+  // async componentDidMount() {
+  //   await this.fetchHiddenLyftData()
+  //     .catch(err => console.error(err))
+  // }
 
   fromAddressGoogle = async (fromGoogleAddress) => {
     await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${fromGoogleAddress}&key=AIzaSyBixPOjrGSjxpkw-pszxd_iUvQdbMBTXxg`, {
@@ -165,16 +165,16 @@ class App extends Component {
     this.setState({ fetchingEstimates: true, uberPrice: null, uberTime: null, lyftCost: null, lyftETA: null })
     const fromAddress = e.target[0].value; const toAddress = e.target[1].value
     Promise.all([this.fromAddressGoogle(fromAddress), this.toAddressGoogle(toAddress)])
-      .then(() => {
-        const puLat = this.state.pickupLatLong.lat; 
-        const puLong = this.state.pickupLatLong.lng; 
-        const doLat = this.state.dropoffLatLong.lat; 
-        const doLong = this.state.dropoffLatLong.lng
-        // Promise.all([
-        //   this.fetchUberPrice(puLat, puLong, doLat, doLong), 
-        //   this.fetchUberTime(puLat, puLong),    
-        //   this.getLyftCost(puLat, puLong, doLat, doLong), this.getLyftETA(puLat, puLong)])
-      })
+      // .then(() => {
+      //   const puLat = this.state.pickupLatLong.lat; 
+      //   const puLong = this.state.pickupLatLong.lng; 
+      //   const doLat = this.state.dropoffLatLong.lat; 
+      //   const doLong = this.state.dropoffLatLong.lng
+      //   Promise.all([
+      //     this.fetchUberPrice(puLat, puLong, doLat, doLong), 
+      //     this.fetchUberTime(puLat, puLong),    
+      //     this.getLyftCost(puLat, puLong, doLat, doLong), this.getLyftETA(puLat, puLong)])
+      // })
       .then(() => Promise.all([this.postLyftDatabase(), this.postUberDatabase()])).catch(error => console.error(error))
   }
 
@@ -338,7 +338,8 @@ class App extends Component {
         />
 
 
-        {this.state.hardCodedLyftCost && this.state.hardCodedUberPrice && this.state.hardCodedUberTime && this.state.hardCodedLyftETA
+        {this.state.hardCodedLyftCost && this.state.hardCodedUberPrice && this.state.hardCodedUberTime && 
+        this.state.hardCodedLyftETA
           ? <Comparison
             // lyftCost={this.state.lyftCost}
             // lyftETA={this.state.lyftETA}
