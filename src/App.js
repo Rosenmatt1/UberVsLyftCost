@@ -32,7 +32,8 @@ class App extends Component {
       orderedLyft: false,
       orderedUber: false,
       uberData: [],
-      lyftData: []
+      lyftData: [],
+      showComparison: false
     }
   }
 
@@ -160,6 +161,12 @@ class App extends Component {
       .then(data => { this.setState({ dropoffLatLong: data.results[0].geometry.location }) })
   }
 
+  showComps = () => {
+    this.setState({
+      showComparison: true
+    })
+  }
+
   searchPrices = (e) => {
     e.preventDefault()
     this.setState({ fetchingEstimates: true, uberPrice: null, uberTime: null, lyftCost: null, lyftETA: null })
@@ -176,7 +183,13 @@ class App extends Component {
       //     this.getLyftCost(puLat, puLong, doLat, doLong), this.getLyftETA(puLat, puLong)])
       // })
       .then(() => Promise.all([this.postLyftDatabase(), this.postUberDatabase()])).catch(error => console.error(error))
+      setInterval(() => {
+      this.showComps()
+    }, 3000)
+      
   }
+
+  
 
   postLyftDatabase = async () => {
     const lyftData = {
@@ -338,8 +351,7 @@ class App extends Component {
         />
 
 
-        {this.state.hardCodedLyftCost && this.state.hardCodedUberPrice && this.state.hardCodedUberTime && 
-        this.state.hardCodedLyftETA
+        {this.state.showComparison
           ? <Comparison
             // lyftCost={this.state.lyftCost}
             // lyftETA={this.state.lyftETA}
