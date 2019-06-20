@@ -185,7 +185,7 @@ class App extends Component {
       .then(() => Promise.all([this.postLyftDatabase(), this.postUberDatabase()])).catch(error => console.error(error))
       setInterval(() => {
       this.showComps()
-    }, 3000)
+    }, 2500)
       
   }
 
