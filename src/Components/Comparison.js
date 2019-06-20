@@ -5,24 +5,24 @@ import uber from './uber.png'
 import { Spring } from 'react-spring/renderprops';
 
 const Comparison = (props) => {
-  const lyftPrice = props.lyftCost < props.hardCodedUberPrice
+  const lyftPrice = props.hardCodedLyftCost < props.hardCodedUberPrice
     ? 'lyftDeal'
-    : props.lyftCost > props.hardCodedUberPrice
+    : props.hardCodedLyftCost > props.hardCodedUberPrice
       ? 'badDealUber'
       : ''
-  const lyftTime = props.lyftETA < props.hardCodedUberPrice
+  const lyftTime = props.hardCodedLyftETA < props.hardCodedUberTime
     ? 'lyftTime'
-    : props.lyftETA > props.hardCodedUberTime
+    : props.hardCodedLyftETA > props.hardCodedUberTime
       ? 'badTimeUber'
       : ''
-  const uberPrice = props.hardCodedUberPrice < props.lyftCost
+  const uberPrice = props.hardCodedUberPrice < props.hardCodedLyftCost
     ? 'uberDeal'
-    : props.hardCodedUberPrice > props.lyftCost
+    : props.hardCodedUberPrice > props.hardCodedLyftCost
       ? 'badDealLyft'
       : ''
-  const uberTime = props.hardCodedUberTime < props.lyftETA
+  const uberTime = props.hardCodedUberTime < props.hardCodedLyftETA
     ? 'uberTime'
-    : props.hardCodedUberTime > props.lyftETA
+    : props.hardCodedUberTime > props.hardCodedLyftETA
       ? 'badTimeLyft'
       : ''
   return (
@@ -41,8 +41,8 @@ const Comparison = (props) => {
                 <div>
                   <img className="logo" alt="Lyft" src={lyft} />
                 </div>
-                <p className={lyftPrice}>Est Cost: ${props.lyftCost}</p>
-                <p className={lyftTime}>ETA: {props.lyftETA} min</p>
+                <p className={lyftPrice}>Est Cost: ${props.hardCodedLyftCost}</p>
+                <p className={lyftTime}>ETA: {props.hardCodedLyftETA} min</p>
                 <button
                   onClick={(e) => props.selectedLyftRide(e)}
                   type="button"
