@@ -183,7 +183,7 @@ class App extends Component {
       //     this.getLyftCost(puLat, puLong, doLat, doLong), this.getLyftETA(puLat, puLong)])
       // })
       .then(() => Promise.all([this.postLyftDatabase(), this.postUberDatabase()])).catch(error => console.error(error))
-      setInterval(() => {
+      setTimeout(() => {
       this.showComps()
     }, 2500)
       
